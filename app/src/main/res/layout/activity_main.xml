@@ -8,6 +8,8 @@
     tools:context="com.sakebook.android.sample.cornercasetestsample.MainActivity">
 
     <TextView
+        android:id="@+id/text"
+        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"/>
