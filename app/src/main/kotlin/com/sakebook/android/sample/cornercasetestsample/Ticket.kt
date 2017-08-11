@@ -6,6 +6,7 @@ import org.joda.time.DateTime
  * Created by sakemotoshinya on 2017/08/09.
  */
 abstract class Ticket {
+    abstract internal var memo: String
     abstract internal val type: Type // チケットの種類
     abstract val purchaseDateTime: DateTime // 購入日
     abstract val eventDateTime: DateTime? //
