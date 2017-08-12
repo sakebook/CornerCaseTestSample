@@ -6,7 +6,8 @@ import org.joda.time.DateTime
 /**
  * Created by sakemotoshinya on 2017/08/09.
  */
-class MovieTicket(override val purchaseDateTime: DateTime = DateTime(), override val type: Type = Type.COUPON) : Ticket() {
+class MovieTicket(override val purchaseDateTime: DateTime = DateTime(),
+                  override val type: Type = Type.COUPON) : Ticket() {
     override var memo: String = "memo"
     override val eventDateTime: DateTime = purchaseDateTime.dayOfMonth().roundFloorCopy()
     override val periodDateTime: PeriodDateTime? = null
