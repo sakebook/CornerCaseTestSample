@@ -1,6 +1,7 @@
 package com.sakebook.android.sample.cornercasetestsample
 
 import android.content.Context
+import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +29,7 @@ class MovieTicketTest {
 
     @Test
     @Throws(Exception::class)
-    fun 抽象クラスのmockは変更が反映されない() {
+    fun mockだとプロパティの変更ができない() {
         val mock = Mockito.mock(MovieTicket::class.java)
         Assert.assertNull(mock.memo) // nullになる
 
@@ -38,43 +39,55 @@ class MovieTicketTest {
 
     @Test
     @Throws(Exception::class)
-    fun 抽象クラスのmockはCALLS_REAL_METHODSが必要() {
+    fun mockでプロパティを変更するにはCALLS_REAL_METHODSが必要() {
         val mockWithOption = Mockito.mock(MovieTicket::class.java, Mockito.CALLS_REAL_METHODS)
         Assert.assertNull(mockWithOption.memo) // nullになる
 
         val memo = "test memo"
         mockWithOption.memo = memo
-        Assert.assertEquals("Mockito.CALLS_REAL_METHODSを利用したのに反映されてない", memo, mockWithOption.memo)
+        Assert.assertEquals(memo, mockWithOption.memo) // test memoが代入されてる
     }
 
     @Test
     @Throws(Exception::class)
-    fun 抽象クラスでもwhenで置き換えることはできる() {
-        val memo = "test memo"
+    fun mockでもwhenでアクセサーを置き換えることはできる() {
         val mock = Mockito.mock(MovieTicket::class.java)
+
+        val memo = "test memo"
         Mockito.`when`(mock.memo).thenReturn(memo)
-        Assert.assertEquals("Mockito.`when`で置き換えできていない", memo, mock.memo)
+        Assert.assertEquals(memo, mock.memo)
     }
 
     @Test
     @Throws(Exception::class)
     fun spyが使えればシンプル() {
         val spy = Mockito.spy(MovieTicket())
-        Assert.assertEquals("初期化されていない", "memo", spy.memo)
+        Assert.assertNotNull(spy.memo) // コンストラクタで初期化されてる
+
+        val memo = "test memo"
+        spy.memo = memo
+        Assert.assertEquals(memo, spy.memo) // test memoが代入されてる
     }
 
     @Test
     @Throws(Exception::class)
     fun 端末時間が不正だと割高になる() {
-        val movieTicket = Mockito.spy(MovieTicket())
-        Assert.assertEquals("aa", 2000, movieTicket.purchasePrice(context))
+        val movieTicket = MovieTicket(purchaseDateTime = DateTime().withHourOfDay(18))
+        val spy = Mockito.spy(movieTicket)
+        Assert.assertEquals(2000, spy.purchasePrice(context))
     }
 
     @Test
     @Throws(Exception::class)
     @Config(shadows = arrayOf(ShadowDevice::class))
-    fun 端末時間が正常() {
-        val movieTicket = Mockito.spy(MovieTicket())
-        Assert.assertEquals("aa", 1800, movieTicket.purchasePrice(context))
+    fun 端末時間が正常の場合時間帯に寄って価格が変わる() {
+        val movieTicket = MovieTicket(purchaseDateTime = DateTime().withHourOfDay(18))
+        val spy = Mockito.spy(movieTicket)
+        Assert.assertEquals(1800, spy.purchasePrice(context))
+
+        val discountMovieTicket = MovieTicket(purchaseDateTime = DateTime().withHourOfDay(0))
+        val spyDiscountMovieTicket = Mockito.spy(discountMovieTicket)
+        Assert.assertEquals(1300, spyDiscountMovieTicket.purchasePrice(context))
+
     }
 }
