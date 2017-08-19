@@ -83,7 +83,7 @@ public final class KJMovieTicket extends KJTicket {
 
     public final int purchasePrice(Context context) {
         Intrinsics.checkParameterIsNotNull(context, "context");
-        boolean flag = Device.INSTANCE.enabledAutoTime(context);
+        boolean flag = KJDevice.INSTANCE.enabledAutoTime(context);
         if(flag)
             return getPrice();
         if(!flag)
