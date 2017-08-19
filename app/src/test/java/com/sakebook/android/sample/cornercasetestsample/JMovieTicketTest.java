@@ -2,6 +2,7 @@ package com.sakebook.android.sample.cornercasetestsample;
 
 import android.content.Context;
 
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,4 +35,24 @@ public class JMovieTicketTest {
         mock.memo = "test memo";
         Assert.assertNotNull(mock.memo); // 代入されるのでNullにはならない
     }
+
+    @Test
+    public void 端末時間が不正だと割高になる() throws Exception {
+        JMovieTicket movieTicket = new JMovieTicket(new DateTime().withHourOfDay(18), Type.COUPON);
+        JMovieTicket spy = Mockito.spy(movieTicket);
+        Assert.assertEquals(2000, spy.purchasePrice(context));
+    }
+
+    @Test
+    @Config(shadows = ShadowJDevice.class)
+    public void 端末時間が正常の場合時間帯によって価格が変わる() throws Exception {
+        JMovieTicket movieTicket = new JMovieTicket(new DateTime().withHourOfDay(18), Type.COUPON);
+        JMovieTicket spy = Mockito.spy(movieTicket);
+        Assert.assertEquals(1800, spy.purchasePrice(context));
+
+        JMovieTicket discountMovieTicket = new JMovieTicket(new DateTime().withHourOfDay(0), Type.COUPON);
+        JMovieTicket spyDiscountMovieTicket = Mockito.spy(discountMovieTicket);
+        Assert.assertEquals(1300, spyDiscountMovieTicket.purchasePrice(context));
+    }
+
 }

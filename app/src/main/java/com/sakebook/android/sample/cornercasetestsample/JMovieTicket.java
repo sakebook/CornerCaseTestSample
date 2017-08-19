@@ -24,15 +24,15 @@ public class JMovieTicket extends JTicket {
         if (dateTime.getDayOfMonth() == 1) {
             return 1100;
         }
-        int today = dateTime.getHourOfDay();
-        if (today < 2 || today >= 20) {
+        int hourOfDay = dateTime.getHourOfDay();
+        if (hourOfDay < 2 || hourOfDay >= 20) {
             return 1300;
         }
         return 1800;
     }
 
     public int purchasePrice(Context context) {
-        if (Device.INSTANCE.enabledAutoTime(context)) {
+        if (JDevice.INSTANCE.enabledAutoTime(context)) {
             return price;
         }
         return 2000;
