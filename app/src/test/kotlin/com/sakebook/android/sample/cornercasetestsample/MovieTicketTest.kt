@@ -81,7 +81,7 @@ class MovieTicketTest {
     @Test
     @Throws(Exception::class)
     @Config(shadows = arrayOf(ShadowDevice::class))
-    fun 端末時間が正常の場合時間帯に寄って価格が変わる() {
+    fun 端末時間が正常の場合時間帯によって価格が変わる() {
         val movieTicket = MovieTicket(purchaseDateTime = DateTime().withHourOfDay(18))
         val spy = Mockito.spy(movieTicket)
         Assert.assertEquals(1800, spy.purchasePrice(context))
@@ -89,6 +89,5 @@ class MovieTicketTest {
         val discountMovieTicket = MovieTicket(purchaseDateTime = DateTime().withHourOfDay(0))
         val spyDiscountMovieTicket = Mockito.spy(discountMovieTicket)
         Assert.assertEquals(1300, spyDiscountMovieTicket.purchasePrice(context))
-
     }
 }
