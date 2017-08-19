@@ -50,11 +50,12 @@ class MovieTicketTest {
 
     @Test
     @Throws(Exception::class)
-    fun mockでもwhenでアクセサーを置き換えることはできる() {
-        val mock = Mockito.mock(MovieTicket::class.java)
+    fun mockでもwhenでメソッドを置き換えることはできる() {
+        val mock = Mockito.mock(Ticket::class.java)
+        Assert.assertNull(mock.memo) // nullになる
 
         val memo = "test memo"
-        Mockito.`when`(mock.memo).thenReturn(memo)
+        Mockito.`when`(mock.memo).thenReturn(memo) // メソッドの返り値を置き換えている
         Assert.assertEquals(memo, mock.memo)
     }
 

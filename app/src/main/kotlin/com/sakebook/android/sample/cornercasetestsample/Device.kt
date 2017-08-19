@@ -22,5 +22,4 @@ object Device {
             return false
         }
     }
-
 }

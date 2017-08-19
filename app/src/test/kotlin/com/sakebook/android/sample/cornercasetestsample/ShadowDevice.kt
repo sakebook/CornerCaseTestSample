@@ -1,6 +1,5 @@
 package com.sakebook.android.sample.cornercasetestsample
 
-import android.content.ContentResolver
 import android.content.Context
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
